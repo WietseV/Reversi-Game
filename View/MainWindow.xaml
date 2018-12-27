@@ -16,7 +16,7 @@
 
     <Grid Margin="7">
 
-        <ItemsControl  ItemsSource="{Binding Rows}">
+        <ItemsControl  Background="Red" ItemsSource="{Binding Rows}">
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -26,7 +26,7 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ItemsControl ItemsSource="{Binding Squares}">
+                    <ItemsControl Background="Green" ItemsSource="{Binding Squares}">
 
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>

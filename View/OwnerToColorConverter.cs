@@ -22,7 +22,7 @@ namespace View
             }
             if (owner == Player.WHITE)
             {
-                return Brushes.White;
+                return Brushes.DarkRed;
             }
             else { return Brushes.Transparent;}
         }
