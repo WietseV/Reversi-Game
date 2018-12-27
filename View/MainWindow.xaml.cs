@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Model.Reversi;
+using ViewModel;
 
 namespace View
 {
@@ -23,6 +25,13 @@ namespace View
         public MainWindow()
         {
             InitializeComponent();
+
+            this.Game = new ReversiGame(8, 8);
+            this.DataContext =  new BoardViewModel(Game.Board, Game);
+            
         }
+
+        public ReversiGame Game { get; set; }
+        public ReversiBoard Board { get; set; }
     }
 }
