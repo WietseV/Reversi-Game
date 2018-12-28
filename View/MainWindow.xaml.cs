@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Model.Reversi;
 using ViewModel;
+using System.ComponentModel;
 
 namespace View
 {
@@ -27,11 +28,98 @@ namespace View
             InitializeComponent();
 
             this.Game = new ReversiGame(8, 8);
-            this.DataContext =  new BoardViewModel(Game.Board, Game);
-            
+            //this.DataContext = new BoardViewModel(Game.Board, Game);
+            this.DataContext = new Navigator();
+
         }
 
         public ReversiGame Game { get; set; }
         public ReversiBoard Board { get; set; }
     }
+
+    public class Navigator : INotifyPropertyChanged
+        {
+        public ReversiGame Game { get; internal set; }
+        public Screen currentScreen;
+
+            public Navigator()
+            {
+                this.currentScreen = new MainScreen(this);
+            }
+
+            public Screen CurrentScreen
+            {
+                get
+                {
+                    return currentScreen;
+                }
+                set
+                {
+                    this.currentScreen = value;
+
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentScreen)));
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+        }
+
+    public abstract class Screen
+        {
+            public readonly Navigator navigator;
+
+            public Screen(Navigator navigator)
+            {
+                this.navigator = navigator;
+            }
+
+            public void SwitchTo(Screen screen)
+            {
+                this.navigator.CurrentScreen = screen;
+            }
+        }
+
+    public class MainScreen : Screen
+        {
+            public MainScreen(Navigator navigator) : base(navigator)
+            {
+                GoToSettings = new EasyCommand(() => SwitchTo(new SettingsScreen(navigator)));
+            }
+
+            public ICommand GoToSettings { get; }
+        }
+
+    public class SettingsScreen : Screen
+        {
+            public SettingsScreen(Navigator navigator) : base(navigator)
+            {
+                GoToMain = new EasyCommand(() => SwitchTo(new MainScreen(navigator)));
+            }
+
+            public ICommand GoToMain { get; }
+        }
+
+    public class EasyCommand : ICommand
+        {
+            public readonly Action action;
+
+            public EasyCommand(Action action)
+            {
+                this.action = action;
+            }
+
+            // The add { } remove { } gets rid of annoying warning
+            public event EventHandler CanExecuteChanged { add { } remove { } }
+
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+
+            public void Execute(object parameter)
+            {
+                action();
+            }
+        }
+    
 }

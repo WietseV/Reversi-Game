@@ -48,6 +48,7 @@
     <Compile Include="DeferredCell.cs" />
     <Compile Include="Derived.cs" />
     <Compile Include="Flag.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IVar.cs" />
     <Compile Include="ManualCell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

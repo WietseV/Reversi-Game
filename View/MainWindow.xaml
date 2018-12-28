@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:View"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
 
@@ -14,38 +13,60 @@
     </Window.Resources>
 
 
-    <Grid Margin="7">
+    <ContentPresenter Content="{Binding CurrentScreen}">
+        <ContentPresenter.Resources>
+            <DataTemplate DataType="{x:Type view:MainScreen}">
+                <DockPanel>
+                    <Button DockPanel.Dock="Bottom" Command="{Binding GoToSettings}" Content="Go To Settings" />
+                    <Viewbox>
+                        <TextBlock Text="Settings" />
+                    </Viewbox>
+                </DockPanel>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type view:SettingsScreen}">
+                <DockPanel>
+                    <Grid Margin="7">
 
-        <ItemsControl  Background="Red" ItemsSource="{Binding Rows}">
+                        <ItemsControl  Background="Red" ItemsSource="{Binding Rows}">
 
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <ItemsControl Background="Green" ItemsSource="{Binding Squares}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <ItemsControl Background="Green" ItemsSource="{Binding Squares}">
 
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
 
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Button Width="30" Height="30" BorderBrush="Black" BorderThickness="2" Background="AliceBlue" Command="{Binding PutStone}">
-                                    <Ellipse Width="20" Height="20"  Fill="{Binding Owner, Converter={StaticResource ownerToColor}}"/>
-                                </Button>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Width="30" Height="30" BorderBrush="Black" BorderThickness="2" Background="AliceBlue" Command="{Binding PutStone}">
+                                                    <Ellipse Width="20" Height="20"  Fill="{Binding Owner, Converter={StaticResource ownerToColor}}"/>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="test" Margin="288,10,0,279" 
+                   HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="5.895,0.031" />
 
-    </Grid>
+                        
+                        
+
+                    </Grid>
+                    <Button DockPanel.Dock="Bottom" Command="{Binding GoToMain}" Content="Go to Main" />
+                </DockPanel>
+            </DataTemplate>
+        </ContentPresenter.Resources>
+    </ContentPresenter>
 </Window>
