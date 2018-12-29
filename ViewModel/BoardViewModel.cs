@@ -9,18 +9,17 @@ namespace ViewModel
 {
     public class BoardViewModel
     {
-        public ReversiBoard ReversiBoard { get; set; }
-        public ReversiGame ReversiGame { get; set; }
+        public ReversiBoard ReversiBoard { get { return ReversiGame.Board; } }
+        public ReversiGame ReversiGame { get { return Parent.ReversiGame; } }
+        public WindowViewModel Parent { get; set; }
+        public List<BoardRowViewModel> Rows { get; }
 
         public BoardViewModel(WindowViewModel parent)
         {
-            this.ReversiBoard = parent.ReversiBoard;
-            this.ReversiGame = parent.ReversiGame;
+            this.Parent = parent;
             this.Rows = new List<BoardRowViewModel>();
             for (int i = 0; i < ReversiBoard.Height; i++) { Rows.Add(new BoardRowViewModel(this, i)); }//initalize rows
         }
-
-        public List<BoardRowViewModel> Rows { get; }
 
         public void Refresh()
         {
@@ -29,9 +28,7 @@ namespace ViewModel
 
         public void SendRefresh(ReversiGame newGame)
         {
-            this.ReversiGame = newGame;
-            this.ReversiBoard = newGame.Board;
-            this.Refresh();
+            Parent.SendRefresh(newGame);
         }
     }
 }

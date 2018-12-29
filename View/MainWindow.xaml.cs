@@ -26,10 +26,9 @@ namespace View
         public MainWindow()
         {
             InitializeComponent();
-
             this.Game = new ReversiGame(8, 8);
             WindowViewModel wvm = new WindowViewModel(Game);
-            this.DataContext = new Navigator(wvm);
+            this.DataContext = new Navigator(this);
             //this.DataContext = new BoardViewModel(Game.Board, Game);
 
         }
@@ -41,12 +40,13 @@ namespace View
     public class Navigator : INotifyPropertyChanged
     {
         public Screen currentScreen;
-        public WindowViewModel wvm;
+        public WindowViewModel Wvm { get; internal set; }
+        internal MainWindow Window { get; private set; }
 
-        public Navigator(WindowViewModel wvm)
+        public Navigator(MainWindow window)
         {
-            this.currentScreen = new MainScreen(this);
-            this.wvm = wvm;
+            Window = window;
+            this.currentScreen = new SettingsScreen(this);
         }
 
         public Screen CurrentScreen
@@ -88,6 +88,8 @@ namespace View
                 GoToSettings = new EasyCommand(() => SwitchTo(new SettingsScreen(navigator)));
             }
 
+            public WindowViewModel Wvm { get => this.navigator.Wvm; }
+
             public ICommand GoToSettings { get; }
         }
 
@@ -95,11 +97,36 @@ namespace View
         {
             public SettingsScreen(Navigator navigator) : base(navigator)
             {
-                GoToMain = new EasyCommand(() => SwitchTo(new MainScreen(navigator)));
+                StartGame = new StartCommand(this);
             }
+        
+            public ICommand StartGame { get; }
 
-            public ICommand GoToMain { get; }
-        }
+            public class StartCommand : ICommand
+            {
+            private readonly SettingsScreen  Ssc;
+
+                public StartCommand(SettingsScreen Ssc)
+                {
+                    this.Ssc = Ssc;
+                Execute(CanExecute(true));
+                }
+
+                // The add { } remove { } gets rid of annoying warning
+                public event EventHandler CanExecuteChanged { add { } remove { } }
+
+                public bool CanExecute(object parameter)
+                {
+                    return true;
+                }
+
+                public void Execute(object parameter)
+                {
+                this.Ssc.navigator.Wvm = new WindowViewModel(new ReversiGame(8, 8));
+                this.Ssc.SwitchTo(new MainScreen(this.Ssc.navigator));
+                }
+            }
+    }
 
     public class EasyCommand : ICommand
         {

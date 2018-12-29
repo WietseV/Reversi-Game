@@ -9,28 +9,22 @@ namespace ViewModel
 {
     public class WindowViewModel
     {
-        public ReversiBoard ReversiBoard { get; set; }
         public ReversiGame ReversiGame { get; set; }
+        public BoardViewModel Board { get; }
+        public GameSettingsViewModel GameSettings { get; }
 
         public WindowViewModel(ReversiGame game)
         {
             this.ReversiGame = game;
-            this.ReversiBoard = this.ReversiGame.Board;
-            new BoardViewModel(this); //initalize rows
-        }
-
-        public List<BoardRowViewModel> Rows { get; }
-
-        public void Refresh()
-        {
-            foreach (BoardRowViewModel row in Rows) { row.Refresh(); }
+            this.Board = new BoardViewModel(this);
+            this.GameSettings = new GameSettingsViewModel(this); 
         }
 
         public void SendRefresh(ReversiGame newGame)
         {
             this.ReversiGame = newGame;
-            this.ReversiBoard = newGame.Board;
-            this.Refresh();
+            Board.Refresh();
+            GameSettings.Refresh();
         }
     }
 }
