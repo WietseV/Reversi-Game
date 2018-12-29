@@ -57,7 +57,8 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </Grid>
-                  <TextBox DockPanel.Dock="Top">test</TextBox>
+                  <Button DockPanel.Dock="Top" Content="{Binding Wvm.GameSettings.WhitePoints}"/>
+                  <Button DockPanel.Dock="Top" Content="{Binding Wvm.GameSettings.BlackPoints}"/>
                   <Button DockPanel.Dock="Bottom" Command="{Binding GoToSettings}" Content="Settings" />
                 </DockPanel>
             </DataTemplate>

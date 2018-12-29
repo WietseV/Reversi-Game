@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="BoardRowViewModel.cs" />
     <Compile Include="BoardSquareViewModel.cs" />
+    <Compile Include="GameSettingsViewModel.cs" />
     <Compile Include="WindowViewModel.cs" />
     <Compile Include="BoardViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
