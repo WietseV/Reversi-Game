@@ -7,17 +7,16 @@ using Model.Reversi;
 
 namespace ViewModel
 {
-    public class BoardViewModel
+    public class WindowViewModel
     {
         public ReversiBoard ReversiBoard { get; set; }
         public ReversiGame ReversiGame { get; set; }
 
-        public BoardViewModel(WindowViewModel parent)
+        public WindowViewModel(ReversiGame game)
         {
-            this.ReversiBoard = parent.ReversiBoard;
-            this.ReversiGame = parent.ReversiGame;
-            this.Rows = new List<BoardRowViewModel>();
-            for (int i = 0; i < ReversiBoard.Height; i++) { Rows.Add(new BoardRowViewModel(this, i)); }//initalize rows
+            this.ReversiGame = game;
+            this.ReversiBoard = this.ReversiGame.Board;
+            new BoardViewModel(this); //initalize rows
         }
 
         public List<BoardRowViewModel> Rows { get; }

@@ -27,7 +27,7 @@
                 <DockPanel>
                     <Grid Margin="7">
 
-                        <ItemsControl  Background="Red" ItemsSource="{Binding Rows}">
+                        <ItemsControl  Background="Red" ItemsSource="{Binding wvm.ReversiBoard.Rows}">
 
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -37,7 +37,7 @@
 
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <ItemsControl Background="Green" ItemsSource="{Binding Squares}">
+                                    <ItemsControl Background="Green" ItemsSource="{Binding wvm.ReversiBoard.Squares}">
 
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -56,13 +56,6 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="test" Margin="288,10,0,279" 
-                   HorizontalAlignment="Left" VerticalAlignment="Center" RenderTransformOrigin="5.895,0.031" />
-
-                        
-                        
-
                     </Grid>
                     <Button DockPanel.Dock="Bottom" Command="{Binding GoToMain}" Content="Go to Main" />
                 </DockPanel>

@@ -28,8 +28,9 @@ namespace View
             InitializeComponent();
 
             this.Game = new ReversiGame(8, 8);
+            WindowViewModel wvm = new WindowViewModel(Game);
+            this.DataContext = new Navigator(wvm);
             //this.DataContext = new BoardViewModel(Game.Board, Game);
-            this.DataContext = new Navigator();
 
         }
 
@@ -38,31 +39,32 @@ namespace View
     }
 
     public class Navigator : INotifyPropertyChanged
-        {
-        public ReversiGame Game { get; internal set; }
+    {
         public Screen currentScreen;
+        public WindowViewModel wvm;
 
-            public Navigator()
-            {
-                this.currentScreen = new MainScreen(this);
-            }
-
-            public Screen CurrentScreen
-            {
-                get
-                {
-                    return currentScreen;
-                }
-                set
-                {
-                    this.currentScreen = value;
-
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentScreen)));
-                }
-            }
-
-            public event PropertyChangedEventHandler PropertyChanged;
+        public Navigator(WindowViewModel wvm)
+        {
+            this.currentScreen = new MainScreen(this);
+            this.wvm = wvm;
         }
+
+        public Screen CurrentScreen
+        {
+            get
+            {
+                return currentScreen;
+            }
+            set
+            {
+                this.currentScreen = value;
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CurrentScreen)));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+       }
 
     public abstract class Screen
         {
