@@ -45,8 +45,8 @@ namespace ViewModel
         private int whitePoints;
         public int WhitePoints
         {
-            get { return whitePoints; }
-            private set
+            get { return  ReversiGame.Board.CountStones(Player.WHITE); }
+            set
             {
                 whitePoints = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(whitePoints)));
@@ -56,12 +56,17 @@ namespace ViewModel
         private int blackPoints;
         public int BlackPoints
         {
-            get { return blackPoints; }
-            private set
+            get { return ReversiGame.Board.CountStones(Player.BLACK); }
+            set
             {
                 blackPoints = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(blackPoints)));
             }
+        }
+        
+        public int MaxPoints
+        {
+            get { return ReversiGame.Board.Height* ReversiGame.Board.Width; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

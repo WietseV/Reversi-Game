@@ -39,7 +39,7 @@ namespace View
 
     public class Navigator : INotifyPropertyChanged
     {
-        public Screen currentScreen;
+        private Screen currentScreen;
         public WindowViewModel Wvm { get; internal set; }
         internal MainWindow Window { get; private set; }
 
@@ -91,16 +91,71 @@ namespace View
             public WindowViewModel Wvm { get => this.navigator.Wvm; }
 
             public ICommand GoToSettings { get; }
-        }
+        
+    }
 
-    public class SettingsScreen : Screen
+    public class SettingsScreen : Screen, INotifyPropertyChanged
         {
             public SettingsScreen(Navigator navigator) : base(navigator)
             {
                 StartGame = new StartCommand(this);
             }
-        
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public WindowViewModel Wvm { get => this.navigator.Wvm; }
+
             public ICommand StartGame { get; }
+
+            private int height = 8;
+            public int Height
+            {
+                get { return height; }
+                set
+                {
+                if (ReversiBoard.IsValidHeight(value))
+                {
+                    height = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(height)));
+                }
+                }
+            }
+
+            private int width = 8;
+            public int Width
+            {
+                get { return width; }
+                set
+                {
+                    if (ReversiBoard.IsValidWidth(value))
+                    {
+                        width = value;
+                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(width)));
+                    }
+                }
+            }
+
+            private String playerBlackName = "Black" ;
+            public String PlayerBlackName
+        {
+                get { return playerBlackName; }
+                set
+                {
+                    playerBlackName = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(playerBlackName)));
+                }
+            }
+
+            private String playerWhiteName = "White";
+            public String PlayerWhiteName
+        {
+                get { return playerWhiteName; }
+                set
+                {
+                    playerWhiteName = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(playerWhiteName)));
+                }
+            }
 
             public class StartCommand : ICommand
             {
@@ -111,8 +166,7 @@ namespace View
                     this.Ssc = Ssc;
                 Execute(CanExecute(true));
                 }
-
-                // The add { } remove { } gets rid of annoying warning
+            
                 public event EventHandler CanExecuteChanged { add { } remove { } }
 
                 public bool CanExecute(object parameter)
@@ -122,7 +176,7 @@ namespace View
 
                 public void Execute(object parameter)
                 {
-                this.Ssc.navigator.Wvm = new WindowViewModel(new ReversiGame(8, 8));
+                this.Ssc.navigator.Wvm = new WindowViewModel(new ReversiGame(Ssc.Height, Ssc.Width));
                 this.Ssc.SwitchTo(new MainScreen(this.Ssc.navigator));
                 }
             }

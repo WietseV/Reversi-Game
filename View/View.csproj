@@ -70,6 +70,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PlayerToStringConverter.cs" />
     <Compile Include="OwnerToColorConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
