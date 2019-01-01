@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:view="clr-namespace:View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Reversi Game" 
+        Height="{Binding Wvm.GameSettings.WindowHeight}" 
+        Width="{Binding Wvm.GameSettings.WindowWidth}">
 
     <Window.Resources>
         <view:OwnerToColorConverter x:Key="ownerToColor" />
@@ -38,9 +40,9 @@
                     <Label Grid.Column="3" Grid.Row="0" Content="Width: "/>
                     <TextBox Grid.Column="4" Grid.Row="0" Text="{Binding Width}"/>
                     <Label Grid.Column="1" Grid.Row="2" Content="Player1: "/>
-                    <TextBox Grid.Column="2" Grid.Row="2" Text="{Binding PlayerBlackName}"/>
+                    <TextBox Grid.Column="2" Grid.Row="2" Text="{Binding BlackName}"/>
                     <Label Grid.Column="3" Grid.Row="2" Content="Player2: "/>
-                    <TextBox Grid.Column="4" Grid.Row="2" Text="{Binding PlayerWhiteName}"/>
+                    <TextBox Grid.Column="4" Grid.Row="2" Text="{Binding WhiteName}"/>
                   </Grid>
                   <Button DockPanel.Dock="Bottom" Command="{Binding StartGame}" Content="Start Game" />
                 </DockPanel>
@@ -51,15 +53,16 @@
                       <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="2*"/>
-                      </Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
                       <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="2*"/>
                       </Grid.RowDefinitions>
-                        <ItemsControl  Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Background="Red" ItemsSource="{Binding Wvm.Board.Rows}">
+                        <ItemsControl  Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" ItemsSource="{Binding Wvm.Board.Rows}">
 
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -69,7 +72,7 @@
 
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <ItemsControl Background="Green" ItemsSource="{Binding Squares}">
+                                    <ItemsControl ItemsSource="{Binding Squares}">
 
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -88,16 +91,19 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <Label Grid.Column="1" Grid.Row="0" Content="CurrentPlayer: "/>
-                        <Label Grid.Column="2" Grid.Row="0" Content="{Binding Wvm.GameSettings.CurrentPlayer, Converter={StaticResource playerToString}}"/>
-                        <Label Grid.Column="1" Grid.Row="1" Content="White: "/>
-                        <ProgressBar Grid.Column="2" Grid.Row="1" Minimum="0" Maximum="{Binding Wvm.GameSettings.MaxPoints}" Value="{Binding Wvm.GameSettings.WhitePoints}"/>
-                        <Label Grid.Column="2" Grid.Row="1" Content="{Binding Wvm.GameSettings.WhitePoints}"/>
-                        <Label Grid.Column="1" Grid.Row="2" Content="Black: "/>
-                        <ProgressBar Grid.Column="2" Grid.Row="2" Minimum="0" Maximum="{Binding Wvm.GameSettings.MaxPoints}" Value="{Binding Wvm.GameSettings.BlackPoints}"/>
-                        <Label Grid.Column="2" Grid.Row="2" Content="{Binding Wvm.GameSettings.BlackPoints}"/>
+                        <Button Height="40" Grid.Column="3" Grid.Row="0" Margin="10" BorderBrush="Black" BorderThickness="2" Background="AliceBlue" Command="{Binding Wvm.Board.Undo}" Content="Undo"/>
+                        <Label Grid.Column="1" Grid.Row="0" FontWeight="Bold" Content="CurrentPlayer: "/>
+                        <Label Grid.Column="2" Grid.Row="0" FontWeight="Bold" Foreground="{Binding Wvm.GameSettings.CurrentPlayer, Converter={StaticResource ownerToColor}}" Content="{Binding Wvm.GameSettings.CurrentPlayer, Converter={StaticResource playerToString}}"/>
+                        <Label Grid.Column="1" Grid.Row="1" FontWeight="Bold" Foreground="{Binding Pi.Color1}" Content="{Binding Pi.Player1}"/>
+                        <ProgressBar Height="40" Margin="1" Grid.Column="2" Grid.Row="1" Minimum="0" Maximum="{Binding Wvm.GameSettings.MaxPoints}" Value="{Binding Wvm.GameSettings.BlackPoints}"/>
+                        <Label Grid.Column="2" Grid.Row="1" FontWeight="Bold" Content="{Binding Wvm.GameSettings.BlackPoints}"/>
+                        <Label Grid.Column="1" Grid.Row="2" FontWeight="Bold" Foreground="{Binding Pi.Color2}" Content="{Binding Pi.Player2}"/>
+                        <ProgressBar Height="40" Margin="1" Grid.Column="2" Grid.Row="2" Minimum="0" Maximum="{Binding Wvm.GameSettings.MaxPoints}" Value="{Binding Wvm.GameSettings.WhitePoints}"/>
+                        <Label Grid.Column="2" Grid.Row="2" FontWeight="Bold" Content="{Binding Wvm.GameSettings.WhitePoints}"/>
                     </Grid>
-                  <Button DockPanel.Dock="Bottom" Command="{Binding GoToSettings}" Content="Settings" />
+                    <Label FontSize="20" FontWeight="Bold" DockPanel.Dock="Top" Content="{Binding Wvm.GameSettings.IsGameOver}"/>
+                    <Label FontSize="20" FontWeight="Bold" DockPanel.Dock="Top" Foreground="{Binding Wvm.GameSettings.Winner, Converter={StaticResource ownerToColor}}" Content="{Binding Wvm.GameSettings.Winner, Converter={StaticResource playerToString}}"/>
+                    <Button DockPanel.Dock="Bottom" Command="{Binding GoToSettings}" Content="Restart" />
                 </DockPanel>
             </DataTemplate>
         </ContentPresenter.Resources>

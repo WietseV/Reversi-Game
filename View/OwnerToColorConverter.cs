@@ -18,11 +18,11 @@ namespace View
             Player owner = value as Player;
             if (owner == Player.BLACK)
             {
-                return Brushes.Black;
+                return GameInfo.GetPlayerInfo(owner).Color1;
             }
             if (owner == Player.WHITE)
             {
-                return Brushes.DarkRed;
+                return GameInfo.GetPlayerInfo(owner).Color2;
             }
             else { return Brushes.Transparent;}
         }

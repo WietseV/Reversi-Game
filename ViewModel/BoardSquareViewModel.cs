@@ -17,6 +17,7 @@ namespace ViewModel
         public int Index2 { get; private set; }//column index
         public ReversiBoard ReversiBoard { get { return ReversiGame.Board; } }
         public ReversiGame ReversiGame { get { return Parent.ReversiGame; } }
+        public List<ReversiGame> OldGames { get; set; }
         public Vector2D Position { get { return new Vector2D(this.Index1, this.Index2); }}
         public ICommand PutStone { get; private set; }//to handle the button click of the stones
         public BoardRowViewModel Parent { get; set; }
@@ -60,7 +61,7 @@ namespace ViewModel
         public PutStoneCommand(BoardSquareViewModel BoardSquareViewModel)
         {
             this.BoardSquareViewModel = BoardSquareViewModel;
-            this.BoardSquareViewModel.PropertyChanged += (sender, e) =>//todo
+            this.BoardSquareViewModel.PropertyChanged += (sender, e) =>
             {
                 CanExecuteChanged?.Invoke(this, new EventArgs());
             };
@@ -75,6 +76,7 @@ namespace ViewModel
 
         public void Execute(object parameter)
         {
+            BoardSquareViewModel.Parent.Parent.Undoing = false;
                 BoardSquareViewModel.SendRefresh(BoardSquareViewModel.ReversiGame.PutStone(BoardSquareViewModel.Position));
         }
     }
