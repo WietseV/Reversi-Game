@@ -62,7 +62,8 @@ namespace ViewModel
             {
                 if (ReversiGame.IsGameOver)
                 {
-                    isGameOver = "Game Over! The winner was: ";
+                    if (ReversiGame.Board.CountStones(Player.WHITE) == ReversiGame.Board.CountStones(Player.BLACK)) { isGameOver = "Its a draw!"; }
+                    else { isGameOver = "Game Over! The winner was: "; }
                     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsGameOver)));
                 }
             }

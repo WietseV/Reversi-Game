@@ -81,11 +81,12 @@ namespace View
         }
     }
 
-    public class MainScreen : Screen
+    public class MainScreen : Screen, INotifyPropertyChanged
     {
         public MainScreen(Navigator navigator) : base(navigator)
         {
             GoToSettings = new EasyCommand(() => SwitchTo(new SettingsScreen(navigator)));
+            Undo = new UndoCommand(this);
         }
 
 
@@ -93,6 +94,40 @@ namespace View
         public PlayerInfo Pi { get => this.navigator.Pi; }
 
         public ICommand GoToSettings { get; }
+        public UndoCommand Undo { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public class UndoCommand : ICommand
+        {
+            private readonly MainScreen Ms;
+
+            public event EventHandler CanExecuteChanged;
+            public UndoCommand(MainScreen Ms)
+            {
+                this.Ms = Ms;
+                this.Ms.PropertyChanged += (sender, e) =>
+                {
+                    CanExecuteChanged?.Invoke(this, new EventArgs());
+                };
+            }
+
+
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
+
+            public void Execute(object parameter)
+            {
+                if (this.Ms.navigator.Wvm.Board.OldGames.Count != 0 && !this.Ms.navigator.Wvm.Board.Parent.ReversiGame.IsGameOver)
+                {
+                    this.Ms.navigator.Wvm.Board.Undoing = true;
+                    this.Ms.navigator.Wvm.Board.SendRefresh(this.Ms.navigator.Wvm.Board.OldGames[this.Ms.navigator.Wvm.Board.OldGames.Count - 1]);
+                    this.Ms.navigator.Wvm.Board.OldGames.RemoveAt(this.Ms.navigator.Wvm.Board.OldGames.Count - 1);
+                }
+            }
+        }
     }
 
     public class SettingsScreen : Screen, INotifyPropertyChanged
@@ -193,7 +228,7 @@ namespace View
 
             public bool CanExecute(object parameter)
             {
-                return ReversiBoard.IsValidHeight(Ssc.Height) && ReversiBoard.IsValidWidth(Ssc.Width) && Ssc.Height == Ssc.Width;
+                return ReversiBoard.IsValidHeight(Ssc.Height) && ReversiBoard.IsValidWidth(Ssc.Width) && Ssc.Height == Ssc.Width && Ssc.Height != 2;
             }
 
             public void Execute(object parameter)
@@ -203,7 +238,7 @@ namespace View
                 GameInfo.GetPlayerInfo(Player.BLACK).Color1 = Ssc.BlackColor;
                 GameInfo.GetPlayerInfo(Player.WHITE).Color2 = Ssc.WhiteColor;
                 this.Ssc.navigator.Wvm = new WindowViewModel(new ReversiGame(Ssc.Height, Ssc.Width));
-                this.Ssc.navigator.Window.Height = this.Ssc.Height *30 + 220;
+                this.Ssc.navigator.Window.Height = this.Ssc.Height *30 + 180;
                 this.Ssc.SwitchTo(new MainScreen(this.Ssc.navigator));
             }
         }
